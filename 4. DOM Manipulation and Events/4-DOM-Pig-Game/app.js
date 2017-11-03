@@ -13,7 +13,7 @@ GAME RULES:
 
 var globalScores = [0, 0];
 var roundScores = [0, 0];
-var turn = 0;
+var activePlayer = 0;
 
 var newGameBtn = document.getElementsByClassName('btn-new')[0];
 var rollBtn = document.getElementsByClassName('btn-roll')[0];
@@ -22,34 +22,84 @@ var globalScoreDisplays = document.getElementsByClassName('player-score');
 var roundScoreDisplays = document.getElementsByClassName('player-current-score');
 var diceRollValue;
 
+// To toggle active class from player names
+var player1PanelClasses = document.getElementsByClassName("player-0-panel")[0].classList;
+var player2PanelClasses = document.getElementsByClassName("player-1-panel")[0].classList;
+
 var diceImage = document.getElementsByClassName('dice')[0];
 
-function turnChange() {
-  if (turn === 0) {
-    turn = 1;
-  } else {
-    turn = 0;
+// Start new game
+newGameBtn.onclick = function() {
+  globalScores = [0, 0];
+  roundScores = [0, 0];
+  globalScoreDisplays[0].innerHTML = '0';
+  globalScoreDisplays[1].innerHTML = '0';
+  roundScoreDisplays[0].innerHTML = '0';
+  roundScoreDisplays[1].innerHTML = '0';
+  activePlayer = 0;
+  if (player2PanelClasses.contains("active")) {
+    player1PanelClasses.add("active");
+    player2PanelClasses.remove("active");
+  }
+  // Undo winner effects
+  document.getElementsByClassName("winner")[0].innerHTML = "PLAYER " + activePlayer;
+  document.getElementsByClassName("winner")[0].classList.remove("winner");
+
+  if (rollBtn.disabled) {
+    rollBtn.disabled = false;
+    holdBtn.disabled = false;
   }
 }
 
-newGameBtn.onclick = function() {
- globalScores = [0, 0];
- roundScores = [0, 0];
- globalScoreDisplays[0].innerHTML = '0';
- globalScoreDisplays[1].innerHTML = '0';
- roundScoreDisplays[0].innerHTML = '0';
- roundScoreDisplays[1].innerHTML = '0';
-}
-
+// Roll dice
 rollBtn.onclick = function() {
-  diceRollValue = Math.floor(Math.random() * 7);
+  diceRollValue = Math.ceil(Math.random() * 6);
 
   diceImage.src = "dice-" + diceRollValue + ".png";
 
   if (diceRollValue != 1) {
-    roundScores[turn] += diceRollValue;
+    roundScores[activePlayer] += diceRollValue;
   } else {
-    roundScores[turn] = 0;
+    roundScores[activePlayer] = 0;
+    roundScoreDisplays[activePlayer].innerHTML = '0';
+    changeActivePlayer();
   }
-  roundScoreDisplays[turn].innerHTML = roundScores[turn];
+  roundScoreDisplays[activePlayer].innerHTML = roundScores[activePlayer];
+}
+
+// Hold points
+holdBtn.onclick = function() {
+  globalScores[activePlayer] += roundScores[activePlayer];
+  globalScoreDisplays[activePlayer].innerHTML = globalScores[activePlayer];
+  roundScores[activePlayer] = 0;
+  roundScoreDisplays[activePlayer].innerHTML = '0';
+  if (globalScores[activePlayer] < 100) {
+    changeActivePlayer();
+  } else {
+    endGame(activePlayer);
+  }
+}
+
+
+// Change players
+function changeActivePlayer() {
+  if (activePlayer === 0) {
+    activePlayer = 1;
+  } else {
+    activePlayer = 0;
+  }
+  player1PanelClasses.toggle("active");
+  player2PanelClasses.toggle("active");
+}
+
+// End Game
+function endGame(winner) {
+  // Disable buttons
+  rollBtn.disabled = true;
+  holdBtn.disabled = true;
+  // Add winner class
+  var winnerClasses = document.getElementById("name-" + winner).classList;
+  winnerClasses.add("winner");
+  // Announce winner
+  document.getElementsByClassName("winner")[0].innerHTML = "WINNER!!!";
 }
