@@ -70,7 +70,7 @@ holdBtn.addEventListener('click', function() {
     // Set previous roll to 0
     previousRoll = 0;
     // Unless player won the game, change player
-    if (globalScores[activePlayer] < 20) {
+    if (globalScores[activePlayer] < 100) {
       changeActivePlayer();
     } else {
       endGame(activePlayer);

@@ -45,7 +45,39 @@ body {
     padding: 100px;
 }
 
+/**********************************************
+*** WINNING SCORE INPUT
+**********************************************/
 
+.winningScoreInput {
+    position: absolute;
+    width: 10em;
+    height: 8em;
+    font-size: 1.3em;
+    margin: 10px;
+    border: 1px black solid;
+    left: 40%;
+    top: 30%;
+    background-color: #EB4D4D;
+}
+
+.winningScoreInput p {
+    margin: 10px;
+}
+
+.winningScoreInput input {
+    font-size: 33px;
+    width: 33%;
+    margin-left: 35%;
+}
+
+#submitScore {
+    background-color: white;
+    font-size: 20px;
+    width: 8em;
+    margin-top: 1em;
+    display: block;
+}
 
 /**********************************************
 *** PLAYERS
