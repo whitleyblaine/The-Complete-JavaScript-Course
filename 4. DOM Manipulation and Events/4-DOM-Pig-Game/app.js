@@ -30,13 +30,12 @@ var diceDOM = document.querySelector('.dice');
 diceDOM.style.display = 'none';
 
 // Start new game
-newGameBtn.addEventListener('click', 'mouseover', function() {
+newGameBtn.addEventListener('click', function() {
   globalScores = [0, 0];
   roundScore = 0;
   globalScoreDisplays[0].innerHTML = '0';
   globalScoreDisplays[1].innerHTML = '0';
-  roundScoreDisplays[0].innerHTML = '0';
-  roundScoreDisplays[1].innerHTML = '0';
+  roundScoreDisplays[activePlayer].innerHTML = '0';
   activePlayer = 0;
   diceDOM.style.display = 'none';
 
@@ -48,10 +47,8 @@ newGameBtn.addEventListener('click', 'mouseover', function() {
   document.querySelector(".winner").innerHTML = "PLAYER " + activePlayer;
   document.querySelector(".winner").classList.remove("winner");
 
-  if (rollBtn.disabled) {
-    rollBtn.disabled = false;
-    holdBtn.disabled = false;
-  }
+  rollBtn.disabled = false;
+  holdBtn.disabled = false;
 }, false)
 
 // Roll dice
@@ -64,14 +61,12 @@ rollBtn.addEventListener('click', function() {
   diceDOM.src = "dice-" + diceRollValue + ".png";
 
   // 3. Update the round score IF the rolled number was NOT a 1
-  if (diceRollValue != 1) {
+  if (diceRollValue !== 1) {
     roundScore += diceRollValue;
+    roundScoreDisplays[activePlayer].innerHTML = roundScore;
   } else {
-    roundScore = 0;
-    roundScoreDisplays[activePlayer].innerHTML = '0';
     changeActivePlayer();
   }
-  roundScoreDisplays[activePlayer].innerHTML = roundScore;
 }, false)
 
 // Hold points
@@ -90,11 +85,9 @@ holdBtn.addEventListener('click', function() {
 
 // Change players
 function changeActivePlayer() {
-  if (activePlayer === 0) {
-    activePlayer = 1;
-  } else {
-    activePlayer = 0;
-  }
+  roundScore = 0;
+  roundScoreDisplays[activePlayer].innerHTML = roundScore;
+  activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
   player1PanelClasses.toggle("active");
   player2PanelClasses.toggle("active");
 }
