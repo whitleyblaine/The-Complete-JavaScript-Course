@@ -23,8 +23,9 @@ var player2PanelClasses = document.querySelector(".player-1-panel").classList;
 
 var diceDOM = document.querySelector('.dice');
 
+var globalScores, roundScore, activePlayer, previousRoll;
+
 // State variable
-var globalScores, roundScore, activePlayer;
 var gamePlaying;
 
 init();
@@ -41,8 +42,16 @@ rollBtn.addEventListener('click', function() {
 
     // 3. Update the round score IF the rolled number was NOT a 1
     if (diceRollValue !== 1) {
-      roundScore += diceRollValue;
-      roundScoreDisplays[activePlayer].innerHTML = roundScore;
+      // If player rolls two 6's in a row, he loses global score
+      if (previousRoll === 6 && diceRollValue === 6) {
+        globalScores[activePlayer] = 0;
+        globalScoreDisplays[activePlayer].innerHTML = '0';
+        changeActivePlayer();
+      } else {
+        roundScore += diceRollValue;
+        roundScoreDisplays[activePlayer].innerHTML = roundScore;
+        previousRoll = diceRollValue;
+      }
     } else {
       changeActivePlayer();
     }
@@ -58,6 +67,8 @@ holdBtn.addEventListener('click', function() {
     // Set round score to 0
     roundScore = 0;
     roundScoreDisplays[activePlayer].innerHTML = '0';
+    // Set previous roll to 0
+    previousRoll = 0;
     // Unless player won the game, change player
     if (globalScores[activePlayer] < 20) {
       changeActivePlayer();
