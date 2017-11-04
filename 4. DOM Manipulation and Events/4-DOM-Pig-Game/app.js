@@ -11,45 +11,20 @@ GAME RULES:
 
 "use strict";
 
-var globalScores = [0, 0];
-var roundScore = 0;
-var activePlayer = 0;
-
 var newGameBtn = document.querySelector('.btn-new');
 var rollBtn = document.querySelector('.btn-roll');
 var holdBtn = document.querySelector('.btn-hold');
 var globalScoreDisplays = document.getElementsByClassName('player-score');
 var roundScoreDisplays = document.getElementsByClassName('player-current-score');
 
-// To toggle active class from player names
+// To toggle active class
 var player1PanelClasses = document.querySelector(".player-0-panel").classList;
 var player2PanelClasses = document.querySelector(".player-1-panel").classList;
 
 var diceDOM = document.querySelector('.dice');
 
-diceDOM.style.display = 'none';
-
 // Start new game
-newGameBtn.addEventListener('click', function() {
-  globalScores = [0, 0];
-  roundScore = 0;
-  globalScoreDisplays[0].innerHTML = '0';
-  globalScoreDisplays[1].innerHTML = '0';
-  roundScoreDisplays[activePlayer].innerHTML = '0';
-  activePlayer = 0;
-  diceDOM.style.display = 'none';
-
-  if (player2PanelClasses.contains("active")) {
-    player1PanelClasses.add("active");
-    player2PanelClasses.remove("active");
-  }
-  // Undo winner effects
-  document.querySelector("#name-" + activePlayer).innerHTML = "PLAYER " + activePlayer;
-  document.querySelector(".winner").classList.remove("winner");
-
-  rollBtn.disabled = false;
-  holdBtn.disabled = false;
-}, false)
+newGameBtn.addEventListener('click', init, false)
 
 // Roll dice
 rollBtn.addEventListener('click', function() {
@@ -84,6 +59,31 @@ holdBtn.addEventListener('click', function() {
     endGame(activePlayer);
   }
 }, false)
+
+
+// FUNCTIONS
+// Initialize game (DRY)
+function init() {
+  globalScores = [0, 0];
+  roundScore = 0;
+  activePlayer = 0;
+  globalScoreDisplays[0].innerHTML = '0';
+  globalScoreDisplays[1].innerHTML = '0';
+  roundScoreDisplays[activePlayer].innerHTML = '0';
+  diceDOM.style.display = 'none';
+
+  if (player2PanelClasses.contains("active")) {
+    player1PanelClasses.add("active");
+    player2PanelClasses.remove("active");
+  }
+  // Undo winner effects
+  document.querySelector("#name-" + activePlayer).innerHTML = "PLAYER " + activePlayer;
+  document.querySelector(".winner").classList.remove("winner");
+
+  rollBtn.disabled = false;
+  holdBtn.disabled = false;
+}
+
 
 
 // Change players
