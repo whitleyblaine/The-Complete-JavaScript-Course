@@ -23,65 +23,76 @@ var player2PanelClasses = document.querySelector(".player-1-panel").classList;
 
 var diceDOM = document.querySelector('.dice');
 
-// Start new game
-newGameBtn.addEventListener('click', init, false)
+// State variable
+var globalScores, roundScore, activePlayer;
+var gamePlaying;
+
+init();
 
 // Roll dice
 rollBtn.addEventListener('click', function() {
-  // 1. Random number
-  var diceRollValue = Math.ceil(Math.random() * 6);
+  if (gamePlaying) {
+    // 1. Random number
+    var diceRollValue = Math.ceil(Math.random() * 6);
 
-  // 2. Display the result
-  diceDOM.style.display = 'block';
-  diceDOM.src = "dice-" + diceRollValue + ".png";
+    // 2. Display the result
+    diceDOM.style.display = 'block';
+    diceDOM.src = "dice-" + diceRollValue + ".png";
 
-  // 3. Update the round score IF the rolled number was NOT a 1
-  if (diceRollValue !== 1) {
-    roundScore += diceRollValue;
-    roundScoreDisplays[activePlayer].innerHTML = roundScore;
-  } else {
-    changeActivePlayer();
+    // 3. Update the round score IF the rolled number was NOT a 1
+    if (diceRollValue !== 1) {
+      roundScore += diceRollValue;
+      roundScoreDisplays[activePlayer].innerHTML = roundScore;
+    } else {
+      changeActivePlayer();
+    }
   }
 }, false)
 
 // Hold points
 holdBtn.addEventListener('click', function() {
-  // Add round score to global score
-  globalScores[activePlayer] += roundScore;
-  globalScoreDisplays[activePlayer].innerHTML = globalScores[activePlayer];
-  // Set round score to 0
-  roundScore = 0;
-  roundScoreDisplays[activePlayer].innerHTML = '0';
-  // Unless player won the game, change player
-  if (globalScores[activePlayer] < 100) {
-    changeActivePlayer();
-  } else {
-    endGame(activePlayer);
+  if (gamePlaying) {
+    // Add round score to global score
+    globalScores[activePlayer] += roundScore;
+    globalScoreDisplays[activePlayer].innerHTML = globalScores[activePlayer];
+    // Set round score to 0
+    roundScore = 0;
+    roundScoreDisplays[activePlayer].innerHTML = '0';
+    // Unless player won the game, change player
+    if (globalScores[activePlayer] < 20) {
+      changeActivePlayer();
+    } else {
+      endGame(activePlayer);
+    }
   }
 }, false)
+
+// Start new game
+newGameBtn.addEventListener('click', init, false)
 
 
 // FUNCTIONS
 // Initialize game (DRY)
 function init() {
+  gamePlaying = true;
   globalScores = [0, 0];
   roundScore = 0;
   activePlayer = 0;
   globalScoreDisplays[0].innerHTML = '0';
   globalScoreDisplays[1].innerHTML = '0';
-  roundScoreDisplays[activePlayer].innerHTML = '0';
+  roundScoreDisplays[0].innerHTML = '0';
+  roundScoreDisplays[1].innerHTML = '0';
   diceDOM.style.display = 'none';
 
-  if (player2PanelClasses.contains("active")) {
-    player1PanelClasses.add("active");
-    player2PanelClasses.remove("active");
-  }
-  // Undo winner effects
-  document.querySelector("#name-" + activePlayer).innerHTML = "PLAYER " + activePlayer;
-  document.querySelector(".winner").classList.remove("winner");
+  player1PanelClasses.remove("active");
+  player2PanelClasses.remove("active");
+  player1PanelClasses.add("active");
 
-  rollBtn.disabled = false;
-  holdBtn.disabled = false;
+  // Undo winner effects
+  document.querySelector("#name-0").innerHTML = "PLAYER 1";
+  document.querySelector("#name-1").innerHTML = "PLAYER 2";
+  player1PanelClasses.remove("winner");
+  player2PanelClasses.remove("winner");
 }
 
 
@@ -97,9 +108,8 @@ function changeActivePlayer() {
 
 // End Game
 function endGame(winner) {
-  // Disable buttons
-  rollBtn.disabled = true;
-  holdBtn.disabled = true;
+  // Change state variable
+  gamePlaying = false;
   // Add winner class
   var winnerPanel = document.querySelector('.player-' + activePlayer + '-panel')
   var winnerClasses = winnerPanel.classList;
