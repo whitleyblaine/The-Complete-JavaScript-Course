@@ -12,7 +12,7 @@ GAME RULES:
 "use strict";
 
 var globalScores = [0, 0];
-var roundScores = [0, 0];
+var roundScore = 0;
 var activePlayer = 0;
 
 var newGameBtn = document.getElementsByClassName('btn-new')[0];
@@ -31,7 +31,7 @@ var diceImage = document.getElementsByClassName('dice')[0];
 // Start new game
 newGameBtn.onclick = function() {
   globalScores = [0, 0];
-  roundScores = [0, 0];
+  roundScore = 0;
   globalScoreDisplays[0].innerHTML = '0';
   globalScoreDisplays[1].innerHTML = '0';
   roundScoreDisplays[0].innerHTML = '0';
@@ -58,20 +58,20 @@ rollBtn.onclick = function() {
   diceImage.src = "dice-" + diceRollValue + ".png";
 
   if (diceRollValue != 1) {
-    roundScores[activePlayer] += diceRollValue;
+    roundScore += diceRollValue;
   } else {
-    roundScores[activePlayer] = 0;
+    roundScore = 0;
     roundScoreDisplays[activePlayer].innerHTML = '0';
     changeActivePlayer();
   }
-  roundScoreDisplays[activePlayer].innerHTML = roundScores[activePlayer];
+  roundScoreDisplays[activePlayer].innerHTML = roundScore;
 }
 
 // Hold points
 holdBtn.onclick = function() {
-  globalScores[activePlayer] += roundScores[activePlayer];
+  globalScores[activePlayer] += roundScore;
   globalScoreDisplays[activePlayer].innerHTML = globalScores[activePlayer];
-  roundScores[activePlayer] = 0;
+  roundScore = 0;
   roundScoreDisplays[activePlayer].innerHTML = '0';
   if (globalScores[activePlayer] < 100) {
     changeActivePlayer();
