@@ -25,13 +25,12 @@ var roundScoreDisplays = document.getElementsByClassName('player-current-score')
 var player1PanelClasses = document.querySelector(".player-0-panel").classList;
 var player2PanelClasses = document.querySelector(".player-1-panel").classList;
 
-var diceImage = document.querySelector('.dice');
-var diceRollValue;
+var diceDOM = document.querySelector('.dice');
 
-diceImage.style.display = 'none';
+diceDOM.style.display = 'none';
 
 // Start new game
-newGameBtn.onclick = function() {
+newGameBtn.addEventListener('click', 'mouseover', function() {
   globalScores = [0, 0];
   roundScore = 0;
   globalScoreDisplays[0].innerHTML = '0';
@@ -39,7 +38,7 @@ newGameBtn.onclick = function() {
   roundScoreDisplays[0].innerHTML = '0';
   roundScoreDisplays[1].innerHTML = '0';
   activePlayer = 0;
-  diceImage.style.display = 'none';
+  diceDOM.style.display = 'none';
 
   if (player2PanelClasses.contains("active")) {
     player1PanelClasses.add("active");
@@ -53,15 +52,18 @@ newGameBtn.onclick = function() {
     rollBtn.disabled = false;
     holdBtn.disabled = false;
   }
-}
+}, false)
 
 // Roll dice
-rollBtn.onclick = function() {
-  diceRollValue = Math.ceil(Math.random() * 6);
-  
-  diceImage.style.display = 'initial';
-  diceImage.src = "dice-" + diceRollValue + ".png";
+rollBtn.addEventListener('click', function() {
+  // 1. Random number
+  var diceRollValue = Math.ceil(Math.random() * 6);
 
+  // 2. Display the result
+  diceDOM.style.display = 'block';
+  diceDOM.src = "dice-" + diceRollValue + ".png";
+
+  // 3. Update the round score IF the rolled number was NOT a 1
   if (diceRollValue != 1) {
     roundScore += diceRollValue;
   } else {
@@ -70,10 +72,10 @@ rollBtn.onclick = function() {
     changeActivePlayer();
   }
   roundScoreDisplays[activePlayer].innerHTML = roundScore;
-}
+}, false)
 
 // Hold points
-holdBtn.onclick = function() {
+holdBtn.addEventListener('click', function() {
   globalScores[activePlayer] += roundScore;
   globalScoreDisplays[activePlayer].innerHTML = globalScores[activePlayer];
   roundScore = 0;
@@ -83,7 +85,7 @@ holdBtn.onclick = function() {
   } else {
     endGame(activePlayer);
   }
-}
+}, false)
 
 
 // Change players
