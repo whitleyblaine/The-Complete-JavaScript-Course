@@ -28,6 +28,8 @@ var player2PanelClasses = document.querySelector(".player-1-panel").classList;
 var diceImage = document.querySelector('.dice');
 var diceRollValue;
 
+diceImage.style.display = 'none';
+
 // Start new game
 newGameBtn.onclick = function() {
   globalScores = [0, 0];
@@ -37,6 +39,8 @@ newGameBtn.onclick = function() {
   roundScoreDisplays[0].innerHTML = '0';
   roundScoreDisplays[1].innerHTML = '0';
   activePlayer = 0;
+  diceImage.style.display = 'none';
+
   if (player2PanelClasses.contains("active")) {
     player1PanelClasses.add("active");
     player2PanelClasses.remove("active");
@@ -54,7 +58,8 @@ newGameBtn.onclick = function() {
 // Roll dice
 rollBtn.onclick = function() {
   diceRollValue = Math.ceil(Math.random() * 6);
-
+  
+  diceImage.style.display = 'initial';
   diceImage.src = "dice-" + diceRollValue + ".png";
 
   if (diceRollValue != 1) {
