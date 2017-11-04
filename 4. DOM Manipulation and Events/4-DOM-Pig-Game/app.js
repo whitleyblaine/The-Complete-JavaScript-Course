@@ -15,9 +15,9 @@ var globalScores = [0, 0];
 var roundScore = 0;
 var activePlayer = 0;
 
-var newGameBtn = document.getElementsByClassName('btn-new')[0];
-var rollBtn = document.getElementsByClassName('btn-roll')[0];
-var holdBtn = document.getElementsByClassName('btn-hold')[0];
+var newGameBtn = document.querySelector('.btn-new');
+var rollBtn = document.querySelector('.btn-roll');
+var holdBtn = document.querySelector('.btn-hold');
 var globalScoreDisplays = document.getElementsByClassName('player-score');
 var roundScoreDisplays = document.getElementsByClassName('player-current-score');
 var diceRollValue;
