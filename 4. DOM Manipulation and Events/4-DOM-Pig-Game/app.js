@@ -20,13 +20,13 @@ var rollBtn = document.querySelector('.btn-roll');
 var holdBtn = document.querySelector('.btn-hold');
 var globalScoreDisplays = document.getElementsByClassName('player-score');
 var roundScoreDisplays = document.getElementsByClassName('player-current-score');
-var diceRollValue;
 
 // To toggle active class from player names
-var player1PanelClasses = document.getElementsByClassName("player-0-panel")[0].classList;
-var player2PanelClasses = document.getElementsByClassName("player-1-panel")[0].classList;
+var player1PanelClasses = document.querySelector(".player-0-panel").classList;
+var player2PanelClasses = document.querySelector(".player-1-panel").classList;
 
-var diceImage = document.getElementsByClassName('dice')[0];
+var diceImage = document.querySelector('.dice');
+var diceRollValue;
 
 // Start new game
 newGameBtn.onclick = function() {
@@ -42,8 +42,8 @@ newGameBtn.onclick = function() {
     player2PanelClasses.remove("active");
   }
   // Undo winner effects
-  document.getElementsByClassName("winner")[0].innerHTML = "PLAYER " + activePlayer;
-  document.getElementsByClassName("winner")[0].classList.remove("winner");
+  document.querySelector(".winner").innerHTML = "PLAYER " + activePlayer;
+  document.querySelector(".winner").classList.remove("winner");
 
   if (rollBtn.disabled) {
     rollBtn.disabled = false;
@@ -98,8 +98,8 @@ function endGame(winner) {
   rollBtn.disabled = true;
   holdBtn.disabled = true;
   // Add winner class
-  var winnerClasses = document.getElementById("name-" + winner).classList;
+  var winnerClasses = document.querySelector("#name-" + winner).classList;
   winnerClasses.add("winner");
   // Announce winner
-  document.getElementsByClassName("winner")[0].innerHTML = "WINNER!!!";
+  document.querySelector(".winner").innerHTML = "WINNER!!!";
 }
