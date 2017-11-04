@@ -44,7 +44,7 @@ newGameBtn.addEventListener('click', function() {
     player2PanelClasses.remove("active");
   }
   // Undo winner effects
-  document.querySelector(".winner").innerHTML = "PLAYER " + activePlayer;
+  document.querySelector("#name-" + activePlayer).innerHTML = "PLAYER " + activePlayer;
   document.querySelector(".winner").classList.remove("winner");
 
   rollBtn.disabled = false;
@@ -71,10 +71,13 @@ rollBtn.addEventListener('click', function() {
 
 // Hold points
 holdBtn.addEventListener('click', function() {
+  // Add round score to global score
   globalScores[activePlayer] += roundScore;
   globalScoreDisplays[activePlayer].innerHTML = globalScores[activePlayer];
+  // Set round score to 0
   roundScore = 0;
   roundScoreDisplays[activePlayer].innerHTML = '0';
+  // Unless player won the game, change player
   if (globalScores[activePlayer] < 100) {
     changeActivePlayer();
   } else {
@@ -98,8 +101,10 @@ function endGame(winner) {
   rollBtn.disabled = true;
   holdBtn.disabled = true;
   // Add winner class
-  var winnerClasses = document.querySelector("#name-" + winner).classList;
+  var winnerPanel = document.querySelector('.player-' + activePlayer + '-panel')
+  var winnerClasses = winnerPanel.classList;
   winnerClasses.add("winner");
+  winnerClasses.remove("active");
   // Announce winner
-  document.querySelector(".winner").innerHTML = "WINNER!!!";
+  document.querySelector("#name-" + activePlayer).innerHTML = "WINNER!!!";
 }
