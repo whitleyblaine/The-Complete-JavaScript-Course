@@ -23,9 +23,10 @@ var winningScoreInput = document.querySelector(".winningScoreInput");
 var player1PanelClasses = document.querySelector(".player-0-panel").classList;
 var player2PanelClasses = document.querySelector(".player-1-panel").classList;
 
-var diceDOM = document.querySelector('.dice');
+var dice1DOM = document.querySelector('.dice1');
+var dice2DOM = document.querySelector('.dice2');
 
-var globalScores, roundScore, activePlayer, previousRoll, winningScore;
+var globalScores, roundScore, activePlayer, winningScore;
 
 // State variable
 var gamePlaying;
@@ -36,26 +37,29 @@ var gamePlaying;
 rollBtn.addEventListener('click', function() {
   if (gamePlaying) {
     // 1. Random number
-    var diceRollValue = Math.ceil(Math.random() * 6);
+    var dice1RollValue = Math.ceil(Math.random() * 6);
+    var dice2RollValue = Math.ceil(Math.random() * 6);
 
     // 2. Display the result
-    diceDOM.style.display = 'block';
-    diceDOM.src = "dice-" + diceRollValue + ".png";
+    dice1DOM.style.display = 'block';
+    dice1DOM.src = "dice-" + dice1RollValue + ".png";
 
-    // 3. Update the round score IF the rolled number was NOT a 1
-    if (diceRollValue !== 1) {
-      // If player rolls two 6's in a row, he loses global score
-      if (previousRoll === 6 && diceRollValue === 6) {
-        globalScores[activePlayer] = 0;
-        globalScoreDisplays[activePlayer].innerHTML = '0';
+    dice2DOM.style.display = 'block';
+    dice2DOM.src = "dice-" + dice2RollValue + ".png";
+
+    // 3. If player rolls two 1s, he loses global score
+    if (dice1RollValue === 1 && dice2RollValue === 1) {
+      globalScores[activePlayer] = 0;
+      globalScoreDisplays[activePlayer].innerHTML = '0';
+      changeActivePlayer();
+    } else {
+      // If player rolls one 1, he loses current score
+      if (dice1RollValue === 1 || dice2RollValue === 1) {
         changeActivePlayer();
       } else {
-        roundScore += diceRollValue;
+        roundScore += (dice1RollValue + dice2RollValue);
         roundScoreDisplays[activePlayer].innerHTML = roundScore;
-        previousRoll = diceRollValue;
       }
-    } else {
-      changeActivePlayer();
     }
   }
 }, false)
@@ -69,8 +73,6 @@ holdBtn.addEventListener('click', function() {
     // Set round score to 0
     roundScore = 0;
     roundScoreDisplays[activePlayer].innerHTML = '0';
-    // Set previous roll to 0
-    previousRoll = 0;
     // Unless player won the game, change player
     if (globalScores[activePlayer] < winningScore) {
       changeActivePlayer();
@@ -95,7 +97,8 @@ function init() {
   globalScoreDisplays[1].innerHTML = '0';
   roundScoreDisplays[0].innerHTML = '0';
   roundScoreDisplays[1].innerHTML = '0';
-  diceDOM.style.display = 'none';
+  dice1DOM.style.display = 'none';
+  dice2DOM.style.display = 'none';
 
   player1PanelClasses.remove("active");
   player2PanelClasses.remove("active");
@@ -110,7 +113,7 @@ function init() {
   // Submit winning score
   submitBtn.addEventListener('click', function() {
     winningScore = document.querySelector(".winningScoreInput input").value;
-    if (winningScore >= 10) {
+    if (winningScore >= 20) {
       winningScoreInput.style.display = 'none';
       gamePlaying = true;
     } else {
