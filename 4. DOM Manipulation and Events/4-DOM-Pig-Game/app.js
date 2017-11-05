@@ -14,8 +14,10 @@ GAME RULES:
 var newGameBtn = document.querySelector('.btn-new');
 var rollBtn = document.querySelector('.btn-roll');
 var holdBtn = document.querySelector('.btn-hold');
+var submitBtn = document.querySelector('.btn-submit');
 var globalScoreDisplays = document.getElementsByClassName('player-score');
 var roundScoreDisplays = document.getElementsByClassName('player-current-score');
+var winningScoreInput = document.querySelector(".winningScoreInput");
 
 // To toggle active class
 var player1PanelClasses = document.querySelector(".player-0-panel").classList;
@@ -23,12 +25,12 @@ var player2PanelClasses = document.querySelector(".player-1-panel").classList;
 
 var diceDOM = document.querySelector('.dice');
 
-var globalScores, roundScore, activePlayer, previousRoll;
+var globalScores, roundScore, activePlayer, previousRoll, winningScore;
 
 // State variable
 var gamePlaying;
 
-init();
+  init();
 
 // Roll dice
 rollBtn.addEventListener('click', function() {
@@ -70,7 +72,7 @@ holdBtn.addEventListener('click', function() {
     // Set previous roll to 0
     previousRoll = 0;
     // Unless player won the game, change player
-    if (globalScores[activePlayer] < 100) {
+    if (globalScores[activePlayer] < winningScore) {
       changeActivePlayer();
     } else {
       endGame(activePlayer);
@@ -85,7 +87,7 @@ newGameBtn.addEventListener('click', init, false)
 // FUNCTIONS
 // Initialize game (DRY)
 function init() {
-  gamePlaying = true;
+  winningScoreInput.style.display = 'block';
   globalScores = [0, 0];
   roundScore = 0;
   activePlayer = 0;
@@ -104,6 +106,17 @@ function init() {
   document.querySelector("#name-1").innerHTML = "PLAYER 2";
   player1PanelClasses.remove("winner");
   player2PanelClasses.remove("winner");
+
+  // Submit winning score
+  submitBtn.addEventListener('click', function() {
+    winningScore = document.querySelector(".winningScoreInput input").value;
+    if (winningScore >= 10) {
+      winningScoreInput.style.display = 'none';
+      gamePlaying = true;
+    } else {
+      alert('Sorry, the winning score must be at least 10!')
+    }
+  }, false)
 }
 
 
